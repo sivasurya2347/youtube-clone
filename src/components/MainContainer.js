@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import ButtonList from './ButtonList'
+// import ButtonList from './ButtonList'
 import VideoContainer from './VideoContainer'
 import { Youtube_API_Videos } from '../utils/constants'
 import { Link } from 'react-router-dom'
@@ -15,12 +15,12 @@ const MainContainer = () => {
     const data = await fetch(Youtube_API_Videos)
     const json = await data.json();
     setvideos(json.items)
-    // console.log(videos)
+    console.log(videos)
  }
 
   return (
     <div >
-        <ButtonList/>
+        {/* <ButtonList/> */}
         <div className='flex flex-wrap'>
               {videos.map(videos=>
               <Link to={'/watch?v='+videos.id}>
