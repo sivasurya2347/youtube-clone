@@ -2,17 +2,27 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { closeMenu } from '../redux/appSlice';
-import { Youtube_Comments } from '../utils/constants';
+import { Youtube_API_Videos, Youtube_Comments } from '../utils/constants';
 import MainContainer from './MainContainer';
 import Comment from './Comment';
 import { Google_API } from '../utils/constants';
 
 const Container = () => {
   const [searchParams] = useSearchParams();
+  const [Item,setItem] = useState([])
+  const [VideoInfo,setVideoInfo]=useState([])
   const [commentsList,setcommentsList]=useState([])
   const dispatch = useDispatch()
   // console.log(searchParams.get('v'))
-  const handledata=async()=>{
+
+  const handledata = async()=>{
+    const Id_video = await fetch(Youtube_API_Videos)
+    const json = await Id_video.json();
+    setItem(json?.items);
+    // console.log(json?.items);
+  }
+
+  const handlecomment=async()=>{
     const videoId = searchParams.get('v');
     const data = await fetch(`${Youtube_Comments}${videoId}&key=${Google_API}`);    
       const json = await data.json()
@@ -21,8 +31,16 @@ const Container = () => {
 
   useEffect(()=>{
         dispatch(closeMenu())
+        handlecomment()
         handledata()
   },[dispatch,searchParams])
+
+  useEffect(() => {
+    if (Item.length > 0) {
+      setVideoInfo(Item.filter((item) => item.id === searchParams.get('v')));
+    }
+    console.log(VideoInfo[0])
+  }, [Item, searchParams]);
 
   return (
     <div className='mx-4'>
@@ -37,6 +55,12 @@ const Container = () => {
         web-share" 
         referrerPolicy="strict-origin-when-cross-origin"
         allowFullScreen></iframe>
+
+        <span className=' font-bold text-2xl'>{VideoInfo[0]?.snippet?.title}</span><br></br>
+        <span>Liked : {VideoInfo[0]?.statistics?.likeCount}</span>
+        <div className=' bg-slate-300 rounded-md w-[949px]'>
+          <p>{VideoInfo[0]?.snippet?.description}</p>
+        </div>
     </div>
     <div className='flex w-full max-w-screen-lg'>
      <div className='w-[949px]'>
