@@ -57,8 +57,9 @@ const Container = () => {
         allowFullScreen></iframe>
 
         <span className=' font-bold text-2xl'>{VideoInfo[0]?.snippet?.title}</span><br></br>
-        <span>Liked : {VideoInfo[0]?.statistics?.likeCount}</span>
-        <div className=' bg-slate-300 rounded-md w-[949px]'>
+        <img alt='like' src='https://img.icons8.com/?size=100&id=24816&format=png&color=000000' width={36}/>
+        <span>{VideoInfo[0]?.statistics?.likeCount}</span>
+        <div className=' bg-slate-300 rounded-md w-[949px] my-3'>
           <p>{VideoInfo[0]?.snippet?.description}</p>
         </div>
     </div>
