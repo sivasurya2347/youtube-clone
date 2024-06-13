@@ -10,7 +10,7 @@ const VideoContainer = ({info}) => {
        src={thumbnails.medium.url}/>
         <h3 className='w-64 font-bold'>{title}</h3>
         <p>{channelTitle}</p>
-        <p>{statistics.viewCount}Views</p>
+        {/* <p>{statistics.viewCount}Views</p> */}
     </div>
   )
 }
