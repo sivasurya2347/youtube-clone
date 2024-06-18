@@ -3,18 +3,15 @@ import { useDispatch } from 'react-redux';
 import { toggleMenu } from '../redux/appSlice';
 import { Youtube_API_Search, Google_API } from '../utils/constants';
 import SearchSuggestion from './SearchSuggestion';
-import SearchVideo from './SearchVideo';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import Shimmer from './Shimmer';
 
-const Head = () => {
+const Head = ({onSearch}) => {
   const dispatch = useDispatch();
-  const [toggle, settoggle] = useState(false);
   const [searchSuggestion, setSearchSuggestion] = useState('');
   const [suggestionData, setSuggestionData] = useState([]);
   const [searchAccordian, setSearchAccordian] = useState(false);
-  const [videosearch, setvideosearch] = useState([]);
+ 
 
   const handler = () => {
     dispatch(toggleMenu());
@@ -24,8 +21,7 @@ const Head = () => {
     try {
       const response = await fetch(`${Youtube_API_Search}${searchSuggestion}&type=video&key=${Google_API}`);
       const json = await response.json();
-      setvideosearch(json?.items || []);
-      settoggle(true);
+      onSearch(json?.items || []);
       setSearchAccordian(false);
     } catch (error) {
       console.error('Error fetching video search results:', error);
@@ -68,12 +64,6 @@ const Head = () => {
     };
   }, [searchSuggestion, debouncedHandleSearch]);
 
-  useEffect(() => {
-    if (videosearch.length > 0) {
-      console.log(videosearch);
-    }
-  }, [videosearch]);
-
   return (
     <div className='grid grid-flow-col shadow-lg my-3'>
       <div className='flex col-span-1 m-2'>
@@ -97,25 +87,14 @@ const Head = () => {
           onChange={handleSuggestion}
           onFocus={() => searchSuggestion && setSearchAccordian(true)}
         />
+        <Link to='/results'>
         <button 
           onClick={SearchThings} 
           className='border border-gray-400 rounded-r-full p-2'>
           Search
         </button>
+        </Link>
 
-        {toggle === false ? (
-          <Shimmer />
-        ) : (
-          videosearch.map(item => (
-            <Link to={`/results?search_query=${item.id.videoId}`} key={item.etag}>
-              {toggle && <SearchVideo key={item.etag} val={item} />}
-            </Link>
-          ))
-        )}
-        {console.log(videosearch)}
-        
-         
-        {console.log(videosearch)}
         {searchAccordian && suggestionData.length > 0 && (
           <div className='shadow-md'>
             {suggestionData.map((item) => (
