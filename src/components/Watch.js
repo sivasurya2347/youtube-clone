@@ -7,7 +7,7 @@ import MainContainer from './MainContainer';
 import Comment from './Comment';
 import { Google_API } from '../utils/constants';
 
-const Container = () => {
+const Watch = () => {
   const [searchParams] = useSearchParams();
   const [Item,setItem] = useState([])
   const [VideoInfo,setVideoInfo]=useState([])
@@ -78,4 +78,4 @@ const Container = () => {
   )
 }
 
-export default Container
+export default Watch
