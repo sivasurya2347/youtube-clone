@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import VideoContainer from './VideoContainer';
+// import VideoContainer from './VideoContainer';
 
 const SearchVideo = ({ val }) => {
   if (!val || typeof val !== 'object') {
@@ -13,19 +13,19 @@ const SearchVideo = ({ val }) => {
   }
 
   const { title, thumbnails, description } = snippet;
-  const videoId = id.videoId; // Ensure correct capitalization
+  const videoId = id.videoId;
 
   return (
-    <div className="search-video">
-      <img src={thumbnails?.default?.url} alt={title} />
+    <div className='my-4'>
+    <Link to={`/watch?v=${videoId}`} className='flex items-center no-underline text-black'>
+      <img src={thumbnails?.high?.url} alt={title} width={320} className='mr-4'/>
       <div>
-        <h3>{title}</h3>
-        <p>{description}</p>
+        <h3 className='text-lg font-bold'>{title}</h3>
+        <p className='text-gray-600'>{description}</p>
       </div>
-      <Link to={`/watch?v=${videoId}`}>
-        <VideoContainer info={val}/>
-      </Link>
+    </Link>
     </div>
+
   );
 };
 
