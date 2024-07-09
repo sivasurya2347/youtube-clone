@@ -48,11 +48,13 @@ const Head = ({onSearch}) => {
 
   const debouncedHandleSearch = useCallback(_.debounce(handleSearch, 500), [searchSuggestion]);
 
-  const handleSuggestion = (e) => {
-    setSearchSuggestion(e.target.value);
+  const handleSuggestion = (title) => {
+    setSearchSuggestion(title);
+    setSearchAccordian(false)
   };
 
   useEffect(() => {
+
     if (searchSuggestion) {
       debouncedHandleSearch();
     } else {
@@ -65,6 +67,7 @@ const Head = ({onSearch}) => {
   }, [searchSuggestion, debouncedHandleSearch]);
 
   return (
+
     <div className='grid grid-flow-col shadow-lg my-3'>
       <div className='flex col-span-1 m-2'>
         <img
@@ -73,18 +76,19 @@ const Head = ({onSearch}) => {
           alt="menu"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png"
         />
-        <img
+       <Link to={'/'}> 
+       <img
           className='h-8 mx-3'
           alt="youtube-logo"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Logo_of_YouTube_%282013-2015%29.svg/2560px-Logo_of_YouTube_%282013-2015%29.svg.png"
-        />
+        /></Link>
       </div>
       <div className='col-span-10'>
         <input
           className='border border-black p-2 w-1/2 rounded-l-full my-2'
           type="text"
           value={searchSuggestion}
-          onChange={handleSuggestion}
+          onChange={(e)=>handleSuggestion(e.target.value)}
           onFocus={() => searchSuggestion && setSearchAccordian(true)}
         />
         <Link to='/results'>
@@ -94,14 +98,16 @@ const Head = ({onSearch}) => {
           Search
         </button>
         </Link>
-
-        {searchAccordian && suggestionData.length > 0 && (
-          <div className='shadow-md'>
-            {suggestionData.map((item) => (
-              <SearchSuggestion key={item.id.videoId} search={item} />
-            ))}
-          </div>
-        )}
+        
+      
+      {searchAccordian && suggestionData.length > 0 && (
+        <div className='shadow-md'>
+          {suggestionData.map((item) => (
+            <SearchSuggestion key={item.id.videoId} search={item} suggestion={handleSuggestion}/>
+          ))}
+        </div>
+      )}
+    
       </div>
       <div className='col-span-1'>
         <img
